@@ -1,27 +1,27 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 import numpy as np
 import pandas as pd
 
 
-# In[4]:
+# In[2]:
 
 
 cvs_data = pd.read_csv("CVS.csv")
 cvs_data.tail(3)
 
 
-# In[5]:
+# In[3]:
 
 
 cvs_data['Open'][0]
 
 
-# In[14]:
+# In[54]:
 
 
 ha_close = np.zeros(len(cvs_data['Date']))
@@ -33,9 +33,10 @@ ha_upper = np.zeros(len(cvs_data['Date']))
 ha_lower = np.zeros(len(cvs_data['Date']))
 ha_candle = np.zeros(len(cvs_data['Date']))
 indicator_dates = []
+indicator_nums = []
 
 
-# In[15]:
+# In[55]:
 
 
 for x in range(0, len(ha_close)):
@@ -50,17 +51,20 @@ for x in range(0, len(ha_close)):
     ha_lower[x] = min(ha_open[x], ha_close[x]) - ha_low[x]
     ha_candle[x] = abs(ha_open[x] - ha_close[x])
     if ha_upper[x] > 0 and ha_lower[x] > 0:
-        if ha_upper[x] > 5 * ha_candle[x] and ha_lower[x] > 5 * ha_candle[x]:
+        if ha_upper[x] > 3 * ha_candle[x] and ha_lower[x] > 3 * ha_candle[x]:
             indicator_dates.append(cvs_data["Date"][x])
+            indicator_nums.append(x)
 
 
-# In[16]:
+# In[56]:
 
 
 print(indicator_dates)
+print("____________")
+print(indicator_nums)
 
 
-# In[42]:
+# In[7]:
 
 
 import plotly.graph_objects as go
@@ -90,20 +94,20 @@ original.show()
 fig.show()
 
 
-# In[10]:
+# In[8]:
 
 
 trimmed_cvs_data = cvs_data[cvs_data['Date'] < "2019-03-28"]
 trim_cvs_data = trimmed_cvs_data[trimmed_cvs_data['Date'] > "2019-02-20"]
 
 
-# In[11]:
+# In[9]:
 
 
 # trim_cvs_data.head(100)
 
 
-# In[12]:
+# In[10]:
 
 
 # ha_close_trim = np.zeros(len(trim_cvs_data['Date']))
@@ -119,7 +123,7 @@ trim_ha_low = ha_low[97:122]
 print(trim_ha_open)
 
 
-# In[13]:
+# In[11]:
 
 
 trim_fig = go.Figure(data=[go.Candlestick(x=trim_cvs_data['Date'],
@@ -141,7 +145,7 @@ trim_fig.update_layout(
 trim_fig.show()
 
 
-# In[27]:
+# In[12]:
 
 
 # calculating bearish engulfing pattern
@@ -192,7 +196,7 @@ print(bearish_dates)
 print(bullish_dates)
 
 
-# In[26]:
+# In[13]:
 
 
 bear = go.Figure(data=[go.Candlestick(x=cvs_data['Date'],
@@ -209,7 +213,7 @@ bear.update_layout(
 bear.show()
 
 
-# In[28]:
+# In[14]:
 
 
 bull = go.Figure(data=[go.Candlestick(x=cvs_data['Date'],
@@ -226,7 +230,7 @@ bull.update_layout(
 bull.show()
 
 
-# In[35]:
+# In[15]:
 
 
 combined_bull = []
@@ -238,6 +242,33 @@ for date in indicator_dates:
         combined_bear.append(date)
 print(combined_bull)
 print(combined_bear)
+
+
+# In[60]:
+
+
+current_balance = 1000.0
+owned = 0
+for nums in indicator_nums:
+    flagPos = True
+    flagNeg = True
+    for check in range(nums-1, nums-3, -1):
+        if ha_close[check] < ha_open[check]:
+            flagPos = False
+    for check in range(nums-1, nums-3, -1):
+        if ha_close[check] > ha_open[check]:
+            flagNeg = False
+    if flagNeg == True:
+        print("Buying on: " + cvs_data['Date'][nums])
+        owned += 1
+        current_balance -= ha_open[check+1]
+    if flagPos == True and owned != 0:
+        print("Selling on: " + cvs_data['Date'][nums])
+        current_balance += ha_open[check+1] * owned
+        owned = 0
+print(current_balance)
+print(owned * ha_close[249])
+print("Total worth: " + str(current_balance + owned * ha_close[249]))
 
 
 # In[ ]:
