@@ -197,29 +197,29 @@ class Heikin_Automation:
 # print(combined_bull)
 # print(combined_bear)
 
-def model_simulation(self):
-    current_balance = 1000.0
-    owned = 0
-    for nums in self.indicator_nums:
-        flagPos = True
-        flagNeg = True
-        for check in range(nums-1, nums-3, -1):
-            if self.ha_close[check] < self.ha_open[check]:
-                flagPos = False
-        for check in range(nums-1, nums-3, -1):
-            if self.ha_close[check] > self.ha_open[check]:
-                flagNeg = False
-        if flagNeg == True:
-            print("Buying on: " + self.stock_data['Date'][nums])
-            owned += 1
-            current_balance -= self.ha_open[check+1]
-        if flagPos == True and owned != 0:
-            print("Selling on: " + self.stock_data['Date'][nums])
-            current_balance += self.ha_open[check+1] * owned
-            owned = 0
-    print(current_balance)
-    print(owned * self.ha_close[249])
-    print("Total worth: " + str(current_balance + owned * self.ha_close[249]))
+    def model_simulation(self):
+        current_balance = 1000.0
+        owned = 0
+        for nums in self.indicator_nums:
+            flagPos = True
+            flagNeg = True
+            for check in range(nums-1, nums-3, -1):
+                if self.ha_close[check] < self.ha_open[check]:
+                    flagPos = False
+            for check in range(nums-1, nums-3, -1):
+                if self.ha_close[check] > self.ha_open[check]:
+                    flagNeg = False
+            if flagNeg == True:
+                print("Buying on: " + self.stock_data['Date'][nums])
+                owned += 1
+                current_balance -= self.ha_open[check+1]
+            if flagPos == True and owned != 0:
+                print("Selling on: " + self.stock_data['Date'][nums])
+                current_balance += self.ha_open[check+1] * owned
+                owned = 0
+        print(current_balance)
+        print(owned * self.ha_close[249])
+        print("Total worth: " + str(current_balance + owned * self.ha_close[249]))
 
 # testing it out
 model1 = Heikin_Automation()
