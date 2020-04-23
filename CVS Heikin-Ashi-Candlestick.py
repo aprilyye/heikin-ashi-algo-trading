@@ -21,7 +21,7 @@ cvs_data.tail(3)
 cvs_data['Open'][0]
 
 
-# In[54]:
+# In[4]:
 
 
 ha_close = np.zeros(len(cvs_data['Date']))
@@ -36,7 +36,7 @@ indicator_dates = []
 indicator_nums = []
 
 
-# In[55]:
+# In[5]:
 
 
 for x in range(0, len(ha_close)):
@@ -56,7 +56,7 @@ for x in range(0, len(ha_close)):
             indicator_nums.append(x)
 
 
-# In[56]:
+# In[6]:
 
 
 print(indicator_dates)
@@ -244,10 +244,10 @@ print(combined_bull)
 print(combined_bear)
 
 
-# In[60]:
+# In[16]:
 
 
-current_balance = 1000.0
+current_balance = 1000000.0
 owned = 0
 for nums in indicator_nums:
     flagPos = True
@@ -260,15 +260,21 @@ for nums in indicator_nums:
             flagNeg = False
     if flagNeg == True:
         print("Buying on: " + cvs_data['Date'][nums])
-        owned += 1
-        current_balance -= ha_open[check+1]
+        owned += 100
+        current_balance -= ha_open[check+1] * 100
     if flagPos == True and owned != 0:
         print("Selling on: " + cvs_data['Date'][nums])
-        current_balance += ha_open[check+1] * owned
-        owned = 0
-print(current_balance)
-print(owned * ha_close[249])
+        current_balance += ha_open[check+1] * 10
+        owned -= 10
+print("Cash: " + str(current_balance))
+print("Stock Value: " + str(owned * ha_close[249]))
 print("Total worth: " + str(current_balance + owned * ha_close[249]))
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
