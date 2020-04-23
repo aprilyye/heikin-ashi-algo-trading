@@ -43,7 +43,7 @@ While trading with $1,000,000 and no stock broker fees, simulating how our algor
 
 Had we actually traded this past year, we would have made $18,000. While these returns are narrow, this makes sense since we were conservative with when we bought stock:
 
-![transaction history](/transaction_history.png)
+![transaction_history](/transaction_history.png)
 
 Had we traded on the Dow Jones Industrial AVerage this past year, we would have had 1.008% positive returns (trading using $100,000,000).
 
