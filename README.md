@@ -32,7 +32,6 @@ We created a visual of indicator dates on our Heikin-Ashi Plot (fig 1), then com
 
 **Figure 2: Regular Candlestick Plot**
 ![fig2](/fig2.png)
-Fig2
 
 ## Results
 While trading with $1,000,000 and no stock broker fees, simulating how our algorithm would have performed this past year, our results were as follows:
